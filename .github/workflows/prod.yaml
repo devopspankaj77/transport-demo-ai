@@ -1,0 +1,27 @@
+name: Prod Pipeline
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy-prod:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build and Push to ACR (Simulated)
+        run: |
+          echo "Building image..."
+          # docker build -t ${{ secrets.ACR_NAME }}.azurecr.io/transport-api:${{ github.sha }} .
+          # echo ${{ secrets.ACR_PASSWORD }} | docker login ${{ secrets.ACR_NAME }}.azurecr.io -u ${{ secrets.ACR_USERNAME }} --password-stdin
+          # docker push ${{ secrets.ACR_NAME }}.azurecr.io/transport-api:${{ github.sha }}
+
+      - name: Set up Kustomize
+        uses: imranismail/setup-kustomize@v2
+
+      - name: Update Kubernetes resources
+        run: |
+          cd k8s/overlays/prod
+          kustomize edit set image transport-api=transport-api:${{ github.sha }}
+          # kustomize build . | kubectl apply -f -

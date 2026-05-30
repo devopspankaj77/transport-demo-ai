@@ -1,0 +1,18 @@
+resources:
+- ../../base
+
+namePrefix: prod-
+
+patches:
+- target:
+    kind: Deployment
+    name: transport-api
+  patch: |-
+    - op: replace
+      path: /spec/replicas
+      value: 3
+    - op: add
+      path: /spec/template/spec/containers/0/resources/limits
+      value:
+        cpu: 500m
+        memory: 512Mi

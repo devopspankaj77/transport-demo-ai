@@ -1,0 +1,12 @@
+resources:
+- app.yaml
+- db.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+secretGenerator:
+- name: db-secret
+  literals:
+  - POSTGRES_PASSWORD=postgres
+  - DATABASE_URL=postgres://postgres:postgres@postgres:5432/transport_db
